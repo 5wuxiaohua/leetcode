@@ -1,0 +1,68 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+// 路径之和1
+// Definition for a binary tree node.
+typedef struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+} TreeNode;
+
+bool dfs(struct TreeNode *root, int targetSum) {
+    if (root == NULL) return false;
+
+    targetSum = targetSum - root->val;
+    if (root->left == NULL && root->right == NULL && targetSum == 0) {
+        return true;
+    }
+
+    return dfs(root->left, targetSum) || dfs(root->right, targetSum);
+}
+
+
+bool hasPathSum(struct TreeNode* root, int targetSum){
+    if (root == NULL) return false;
+
+    return dfs(root, targetSum);
+}
+
+// 路径之和2
+// https://cloud.tencent.com/developer/article/1756156
+
+int **ret;
+int retSize;
+int *retColSize;
+
+int *path;
+int pathSize;
+
+void dfs(struct TreeNode* root, int target) {
+    if (root == NULL) return;
+    
+    path[pathSize++] = root->val;
+    target = target - root->val;
+    if (root->left == NULL && root->right == NULL && target == 0) {
+        int *tmp = malloc(sizeof(int) * pathSize);
+        memcpy(tmp, path, sizeof(int) * pathSize);
+        ret[retSize] = tmp;
+        retColSize[retSize++] = pathSize;
+    }
+
+    dfs(root->left, target);
+    dfs(root->right, target);
+    pathSize--;
+}
+
+int** pathSum(struct TreeNode* root, int targetSum, int* returnSize, int** returnColumnSizes){
+    ret = malloc(sizeof(int *) * 2001);
+    path = malloc(sizeof(int) * 2001);
+    retColSize = malloc(sizeof(int) * 2001);
+    retSize = pathSize = 0;
+
+    dfs(root, targetSum);
+    *returnSize = retSize;
+    *returnColumnSizes = retColSize;
+
+    return ret;
+}

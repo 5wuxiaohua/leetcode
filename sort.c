@@ -10,7 +10,7 @@ int binaryFind(int *nums, int len, int target) {
     int left = 0;
     int right = len - 1;
 
-    while (left < right) {
+    while (left <= right) {
         int mid = left + (right - left)/2;
         if (nums[mid] < target) {
             left = mid + 1;
