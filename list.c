@@ -251,3 +251,37 @@ struct ListNode *getIntersectionNode(struct ListNode *headA, struct ListNode *he
 
     return NULL;
 }
+
+// https://leetcode.cn/problems/merge-two-sorted-lists/description/
+// 合并两个有序链表
+ struct ListNode {
+     int val;
+     struct ListNode *next;
+ };
+ 
+typedef struct ListNode ListNode;
+struct ListNode* mergeTwoLists(struct ListNode* list1, struct ListNode* list2){
+    ListNode *new = (ListNode *)malloc(sizeof(ListNode));
+    ListNode *cur = new;
+    while (list1 && list2) {
+        if (list1->val < list2->val) {
+            cur->next = list1;
+            list1 = list1->next;
+        } else {
+            cur->next = list2;
+            list2 = list2->next;
+        }
+        cur = cur->next;
+    }
+    cur->next = list1 == NULL ? list2 : list1;
+    return new->next;
+}
+// https://leetcode.cn/problems/merge-k-sorted-lists/description/?utm_source=LCUS&utm_medium=ip_redirect&utm_campaign=transfer2china
+// 23. 合并 K 个升序链表
+struct ListNode* mergeKLists(struct ListNode** lists, int listsSize){
+    ListNode *ans = NULL;
+    for (int i = 0; i < listsSize; i++) {
+        ans = mergeTwoLists(ans, lists[i]);
+    }
+    return ans;
+}
